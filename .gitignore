@@ -1,0 +1,8 @@
+# Vercel CLI link/state
+.vercel/
+
+# Tooling / OS noise
+node_modules/
+.claude/
+.DS_Store
+Thumbs.db

@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Storefront designs</title>
+<meta name="description" content="Two storefront designs: Meridian Apparel and Sidequest Streetwear.">
+<meta name="theme-color" content="#F4F4F1" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#101112" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='16' height='32' fill='%231D4A45'/%3E%3Crect x='16' width='16' height='32' fill='%235B21E8'/%3E%3C/svg%3E">
+<style>
+:root{
+  --bg:#F4F4F1; --ink:#16181A; --muted:#62686B;
+  --gut-l:max(20px,env(safe-area-inset-left,0px));
+  --gut-r:max(20px,env(safe-area-inset-right,0px));
+}
+@media (prefers-color-scheme:dark){
+  :root{--bg:#101112; --ink:#ECEEEC; --muted:#9AA09E; color-scheme:dark}
+}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:var(--bg);color:var(--ink);
+  font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.55;
+  -webkit-font-smoothing:antialiased}
+main{max-width:1040px;margin:0 auto;padding:64px var(--gut-r) 64px var(--gut-l)}
+h1{margin:0 0 8px;font-size:clamp(28px,5vw,40px);line-height:1.1;letter-spacing:-.02em}
+.lede{margin:0 0 36px;color:var(--muted);max-width:56ch}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+@media (max-width:700px){.grid{grid-template-columns:1fr}}
+.card{display:flex;flex-direction:column;justify-content:space-between;gap:48px;min-height:280px;padding:28px;
+  border-radius:16px;text-decoration:none;transition:transform .18s ease,box-shadow .18s ease}
+.card:hover{transform:translateY(-3px);box-shadow:0 18px 40px -24px rgba(0,0,0,.55)}
+.card:focus-visible{outline:3px solid currentColor;outline-offset:4px}
+.meridian{background:#E9F0EE;color:#1D4A45}
+.sidequest{background:#5B21E8;color:#fff}
+.kicker{font:500 11px/1 ui-monospace,Menlo,Consolas,monospace;letter-spacing:.14em;text-transform:uppercase;opacity:.75}
+.card h2{margin:10px 0 8px;font-size:clamp(26px,4vw,34px);line-height:1.05;letter-spacing:-.02em}
+.sidequest h2{text-transform:uppercase;letter-spacing:-.03em}
+.card p{margin:0;max-width:34ch;opacity:.9}
+.go{font-weight:600}
+@media (prefers-reduced-motion:reduce){.card{transition:none}.card:hover{transform:none}}
+</style>
+</head>
+<body>
+<main>
+  <h1>Storefront designs</h1>
+  <p class="lede">Two storefront designs, each a single self-contained page with a product grid, cart and checkout.</p>
+  <div class="grid">
+    <a class="card meridian" href="meridian.html">
+      <div>
+        <span class="kicker">Autumn / Winter 2026</span>
+        <h2>Meridian Apparel</h2>
+        <p>Considered clothing, built to outlast the season.</p>
+      </div>
+      <span class="go">Open the store &rarr;</span>
+    </a>
+    <a class="card sidequest" href="sidequest.html">
+      <div>
+        <span class="kicker">Drop 04</span>
+        <h2>Sidequest Streetwear</h2>
+        <p>Heavyweight fleece, boxed cuts and cargo. Limited runs of 300.</p>
+      </div>
+      <span class="go">Open the store &rarr;</span>
+    </a>
+  </div>
+</main>
+</body>
+</html>
