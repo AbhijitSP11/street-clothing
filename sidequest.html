@@ -1,0 +1,975 @@
+<title>Sidequest Streetwear</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,400..900&family=Figtree:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap">
+
+<style>
+/* Layout: full-bleed bands with a 1180px inner rail; shop grid -> product sheet -> cart drawer -> checkout sheet, all in one page */
+:root{
+  --bg:#F2EFF8;
+  --surface:#FFFFFF;
+  --surface-2:#E9E3F5;
+  --ink:#16121F;
+  --muted:#6A6383;
+  --line:#DCD4EC;
+  --violet:#5B21E8;
+  --on-violet:#FFFFFF;
+  --tang:#FF5A1F;
+  --lime:#D6FF3E;
+  --on-lime:#1A1A0C;
+  --shadow:0 20px 44px -28px rgba(22,18,31,.55);
+  --display:'Archivo','Arial Black',system-ui,sans-serif;
+  --body:'Figtree',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --mono:'DM Mono',ui-monospace,'SFMono-Regular',Menlo,monospace;
+  --rail:1180px;
+  --gut-l:max(16px,env(safe-area-inset-left,0px));
+  --gut-r:max(16px,env(safe-area-inset-right,0px));
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0D0A14; --surface:#171121; --surface-2:#221B34; --ink:#F3EFFA; --muted:#A098BA;
+    --line:#2E2645; --violet:#8B5CFF; --on-violet:#140B2B; --tang:#FF7A45; --lime:#D6FF3E;
+    --shadow:0 20px 44px -28px rgba(0,0,0,.8); color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0D0A14; --surface:#171121; --surface-2:#221B34; --ink:#F3EFFA; --muted:#A098BA;
+  --line:#2E2645; --violet:#8B5CFF; --on-violet:#140B2B; --tang:#FF7A45; --lime:#D6FF3E;
+  --shadow:0 20px 44px -28px rgba(0,0,0,.8); color-scheme:dark;
+}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--bg);z-index:60}
+h1,h2,h3,h4{margin:0;font-family:var(--display);font-weight:900;font-stretch:118%;line-height:.95;letter-spacing:-.02em;text-wrap:balance}
+p{margin:0}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
+input,select{font:inherit;color:inherit}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--tang);outline-offset:3px;border-radius:4px}
+
+.wrap{max-width:var(--rail);margin:0 auto;padding-left:var(--gut-l);padding-right:var(--gut-r)}
+.mono{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase}
+.muted{color:var(--muted)}
+.num{font-variant-numeric:tabular-nums}
+
+/* ---------- header ---------- */
+.hdr{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:color-mix(in srgb,var(--bg) 86%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.hdr-in{display:flex;align-items:center;gap:18px;height:62px}
+.logo{display:flex;align-items:center;gap:8px;font-family:var(--display);font-weight:900;font-stretch:125%;font-size:19px;letter-spacing:-.04em;text-transform:uppercase}
+.logo .star{color:var(--tang);font-size:15px;animation:spin 9s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.nav{display:flex;gap:20px;margin-left:12px}
+.nav button{font-size:13px;font-weight:600;color:var(--muted);transition:color .18s}
+.nav button:hover,.nav button[aria-current="true"]{color:var(--ink)}
+.hdr-right{margin-left:auto;display:flex;align-items:center;gap:8px}
+.icon-btn{width:40px;height:40px;display:grid;place-items:center;border-radius:12px;border:1px solid var(--line);background:var(--surface);transition:transform .16s,border-color .16s}
+.icon-btn:hover{transform:translateY(-2px);border-color:var(--violet)}
+.cart-btn{position:relative;display:flex;align-items:center;gap:9px;padding:0 15px;height:40px;border-radius:12px;background:var(--ink);color:var(--bg);font-weight:600;font-size:13px;transition:transform .16s}
+.cart-btn:hover{transform:translateY(-2px)}
+.badge{min-width:20px;height:20px;padding:0 6px;border-radius:999px;background:var(--tang);color:#fff;font-family:var(--mono);font-size:11px;display:grid;place-items:center}
+.badge.pop{animation:pop .36s cubic-bezier(.3,1.4,.5,1)}
+@keyframes pop{0%{transform:scale(.6)}60%{transform:scale(1.25)}100%{transform:scale(1)}}
+@media (max-width:640px){.nav{display:none}}
+
+/* ---------- hero ---------- */
+.hero{display:grid;grid-template-columns:1.15fr .85fr;gap:40px;align-items:center;padding-block:52px 44px}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;color:var(--violet)}
+.eyebrow::before{content:"";width:26px;height:2px;background:var(--tang)}
+.hero h1{font-size:clamp(46px,8.2vw,96px);margin:16px 0 0;text-transform:uppercase}
+.hero h1 em{font-style:normal;-webkit-text-stroke:2px var(--ink);color:transparent;padding-right:.06em}
+.hero p.lede{margin-top:18px;max-width:46ch;color:var(--muted);font-size:17px}
+.hero-cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:26px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;height:50px;padding:0 24px;border-radius:14px;font-weight:700;font-size:14.5px;letter-spacing:-.01em;transition:transform .16s,box-shadow .2s,background .2s}
+.btn:hover{transform:translateY(-2px)}
+.btn-primary{background:var(--violet);color:var(--on-violet);box-shadow:0 12px 28px -16px var(--violet)}
+.btn-lime{background:var(--lime);color:var(--on-lime)}
+.btn-ghost{border:1.5px solid var(--line);background:var(--surface)}
+.btn:disabled{opacity:.55;cursor:not-allowed;transform:none}
+.hero-figure{position:relative}
+.hero-figure .plate-box{border-radius:26px;overflow:hidden;box-shadow:var(--shadow);transform:rotate(-1.4deg);transition:transform .5s}
+.hero-figure:hover .plate-box{transform:rotate(0)}
+.seal{position:absolute;left:-26px;bottom:-18px;width:112px;height:112px;border-radius:50%;background:var(--ink);color:var(--bg);display:grid;place-items:center;text-align:center;font-family:var(--mono);font-size:10px;letter-spacing:.1em;line-height:1.35;box-shadow:var(--shadow);animation:bob 5s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-8px)}}
+@media (max-width:860px){.hero{grid-template-columns:1fr;gap:26px;padding-block:34px}.seal{width:92px;height:92px;left:auto;right:8px;bottom:-14px}}
+
+/* ---------- ticker ---------- */
+.ticker{background:var(--violet);color:var(--on-violet);overflow:hidden;border-block:1px solid var(--violet)}
+.ticker-track{display:flex;gap:34px;width:max-content;padding-block:11px;animation:slide 26s linear infinite}
+.ticker span{font-family:var(--mono);font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;white-space:nowrap}
+@keyframes slide{to{transform:translateX(-50%)}}
+
+/* ---------- grid ---------- */
+.shop-head{display:flex;flex-wrap:wrap;align-items:flex-end;gap:16px;padding-block:42px 20px}
+.shop-head h2{font-size:clamp(28px,4.4vw,44px);text-transform:uppercase}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-left:auto}
+.chip{height:36px;padding:0 15px;border-radius:999px;border:1.5px solid var(--line);background:var(--surface);font-size:13px;font-weight:600;transition:all .18s}
+.chip:hover{border-color:var(--violet)}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;padding-bottom:64px}
+@media (max-width:1000px){.grid{grid-template-columns:repeat(3,1fr)}}
+@media (max-width:760px){.grid{grid-template-columns:repeat(2,1fr);gap:14px}}
+@media (max-width:420px){.grid{grid-template-columns:1fr}}
+.card{text-align:left;display:flex;flex-direction:column;gap:11px;animation:rise .5s both}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}}
+.card .plate-box{position:relative;border-radius:18px;overflow:hidden;background:var(--surface-2);transition:transform .3s,box-shadow .3s}
+.card:hover .plate-box{transform:translateY(-6px);box-shadow:var(--shadow)}
+.card:hover .plate-box svg{transform:scale(1.05)}
+.plate-box svg{display:block;width:100%;height:auto;transition:transform .5s cubic-bezier(.2,.7,.3,1)}
+.tag{position:absolute;top:10px;left:10px;padding:5px 9px;border-radius:8px;background:var(--lime);color:var(--on-lime);font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase}
+.quick{position:absolute;left:10px;right:10px;bottom:10px;height:40px;border-radius:12px;background:var(--ink);color:var(--bg);font-weight:700;font-size:13px;display:flex;align-items:center;justify-content:center;opacity:0;transform:translateY(8px);transition:opacity .22s,transform .22s}
+.card:hover .quick,.card:focus-within .quick{opacity:1;transform:none}
+.card h3{font-size:15px;font-weight:800;font-stretch:105%;letter-spacing:-.01em;line-height:1.2}
+.card-row{display:flex;align-items:center;gap:10px}
+.price{font-family:var(--mono);font-size:13.5px;letter-spacing:.02em}
+.dots{display:flex;gap:5px;margin-left:auto}
+.dot{width:12px;height:12px;border-radius:50%;border:1px solid var(--line)}
+@media (hover:none){.quick{opacity:1;transform:none}}
+
+/* ---------- product sheet ---------- */
+.pdp{padding-block:26px 70px}
+.back{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:13.5px;color:var(--muted);margin-bottom:22px}
+.back:hover{color:var(--ink)}
+.pdp-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:46px;align-items:start}
+@media (max-width:900px){.pdp-grid{grid-template-columns:1fr;gap:28px}}
+.gallery{display:flex;flex-direction:column;gap:12px;position:sticky;top:96px}
+@media (max-width:900px){.gallery{position:static}}
+.gallery .main{border-radius:24px;overflow:hidden;background:var(--surface-2);box-shadow:var(--shadow)}
+.gallery .main svg{display:block;width:100%;height:auto;animation:fade .35s}
+@keyframes fade{from{opacity:0;transform:scale(1.02)}}
+.thumbs{display:flex;gap:10px}
+.thumb{flex:1;border-radius:14px;overflow:hidden;border:2px solid transparent;background:var(--surface-2)}
+.thumb[aria-pressed="true"]{border-color:var(--violet)}
+.thumb svg{display:block;width:100%;height:auto}
+.pdp h1{font-size:clamp(32px,5vw,52px);text-transform:uppercase;margin-top:10px}
+.stars{display:flex;align-items:center;gap:8px;color:var(--tang);font-size:14px;margin-top:12px}
+.pdp .pricerow{display:flex;align-items:baseline;gap:12px;margin-top:18px}
+.pdp .big-price{font-family:var(--display);font-size:30px;font-weight:900;font-stretch:112%}
+.strike{color:var(--muted);text-decoration:line-through;font-family:var(--mono);font-size:14px}
+.save{padding:3px 8px;border-radius:7px;background:var(--tang);color:#fff;font-family:var(--mono);font-size:10.5px;letter-spacing:.1em}
+.blurb{margin-top:16px;color:var(--muted);max-width:52ch}
+.field-label{display:flex;align-items:center;justify-content:space-between;margin:26px 0 10px}
+.swatches{display:flex;gap:10px}
+.swatch{width:40px;height:40px;border-radius:12px;border:2px solid var(--line);display:grid;place-items:center;transition:transform .16s}
+.swatch:hover{transform:translateY(-2px)}
+.swatch[aria-pressed="true"]{border-color:var(--ink)}
+.swatch i{width:24px;height:24px;border-radius:7px;display:block}
+.sizes{display:flex;flex-wrap:wrap;gap:8px}
+.size{min-width:54px;height:44px;padding:0 12px;border-radius:12px;border:1.5px solid var(--line);background:var(--surface);font-weight:600;font-size:14px;transition:all .16s}
+.size:hover:not(:disabled){border-color:var(--violet);transform:translateY(-2px)}
+.size[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.size:disabled{opacity:.4;cursor:not-allowed;text-decoration:line-through}
+.qty{display:inline-flex;align-items:center;border:1.5px solid var(--line);border-radius:12px;background:var(--surface);height:50px}
+.qty button{width:44px;height:100%;font-size:19px;font-weight:600;color:var(--muted)}
+.qty button:hover{color:var(--ink)}
+.qty span{min-width:34px;text-align:center;font-family:var(--mono);font-size:15px}
+.buy-row{display:flex;flex-wrap:wrap;gap:12px;margin-top:22px}
+.buy-row .btn{flex:1;min-width:150px}
+.ship-note{display:flex;gap:10px;align-items:flex-start;margin-top:20px;padding:14px;border-radius:14px;background:var(--surface);border:1px solid var(--line);font-size:13.5px}
+.acc{margin-top:26px;border-top:1px solid var(--line)}
+.acc details{border-bottom:1px solid var(--line)}
+.acc summary{list-style:none;cursor:pointer;padding:15px 0;font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:space-between}
+.acc summary::-webkit-details-marker{display:none}
+.acc summary::after{content:"+";font-family:var(--mono);font-size:17px;color:var(--muted)}
+.acc details[open] summary::after{content:"–"}
+.acc .body{padding-bottom:16px;color:var(--muted);font-size:14px}
+.acc ul{margin:0;padding-left:18px}
+.more{padding-block:54px 0;border-top:1px solid var(--line);margin-top:54px}
+.more h2{font-size:24px;text-transform:uppercase;margin-bottom:20px}
+
+/* ---------- drawer / overlays ---------- */
+.scrim{position:fixed;inset:0;background:rgba(10,6,20,.55);backdrop-filter:blur(3px);z-index:70;animation:fadein .25s}
+@keyframes fadein{from{opacity:0}}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(420px,100%);background:var(--bg);z-index:80;display:flex;flex-direction:column;box-shadow:-24px 0 60px -30px rgba(0,0,0,.6);animation:slidein .34s cubic-bezier(.2,.8,.25,1);padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);padding-right:env(safe-area-inset-right,0px)}
+@keyframes slidein{from{transform:translateX(100%)}}
+.drawer-head{display:flex;align-items:center;gap:12px;padding:18px 20px;border-bottom:1px solid var(--line)}
+.drawer-head h2{font-size:20px;text-transform:uppercase}
+.drawer-body{flex:1;overflow:auto;padding:16px 20px;display:flex;flex-direction:column;gap:14px}
+.drawer-foot{border-top:1px solid var(--line);padding:18px 20px;background:var(--surface);display:flex;flex-direction:column;gap:12px}
+.line{display:flex;justify-content:space-between;font-size:14px}
+.line.total{font-family:var(--display);font-weight:900;font-size:20px;font-stretch:112%;padding-top:10px;border-top:1px dashed var(--line);margin-top:4px}
+.citem{display:grid;grid-template-columns:72px 1fr auto;gap:12px;align-items:center;animation:rise .3s both}
+.citem .thumbwrap{border-radius:12px;overflow:hidden;background:var(--surface-2)}
+.citem .thumbwrap svg{display:block;width:100%;height:auto}
+.citem h4{font-size:13.5px;font-weight:700;margin:0;line-height:1.25}
+.citem .meta{font-family:var(--mono);font-size:10.5px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-top:3px}
+.mini-qty{display:inline-flex;align-items:center;gap:2px;border:1px solid var(--line);border-radius:9px;margin-top:7px}
+.mini-qty button{width:26px;height:26px;color:var(--muted)}
+.mini-qty span{min-width:22px;text-align:center;font-family:var(--mono);font-size:12px}
+.empty{text-align:center;padding:48px 10px;color:var(--muted)}
+.empty .big{font-family:var(--display);font-size:46px;font-weight:900;color:var(--line);display:block;margin-bottom:8px}
+
+.sheet{position:fixed;inset:auto 0 0 0;z-index:80;max-height:min(92vh,900px);background:var(--bg);border-radius:26px 26px 0 0;box-shadow:0 -24px 60px -30px rgba(0,0,0,.6);display:flex;flex-direction:column;animation:up .36s cubic-bezier(.2,.8,.25,1);padding-bottom:env(safe-area-inset-bottom,0px)}
+@keyframes up{from{transform:translateY(100%)}}
+@media (min-width:760px){.sheet{inset:auto auto 0 50%;transform:translateX(-50%);width:min(880px,calc(100% - 32px));border-radius:26px;bottom:18px}@keyframes up{from{transform:translate(-50%,100%)}}}
+.sheet-head{display:flex;align-items:center;gap:12px;padding:18px 22px;border-bottom:1px solid var(--line)}
+.sheet-head h2{font-size:20px;text-transform:uppercase}
+.sheet-body{overflow:auto;padding:22px;display:grid;grid-template-columns:1.25fr .75fr;gap:30px}
+@media (max-width:760px){.sheet-body{grid-template-columns:1fr;gap:22px;padding:18px}}
+fieldset{border:0;padding:0;margin:0 0 22px}
+legend{padding:0;font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--violet);margin-bottom:12px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.inp{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}
+.inp label{font-size:12.5px;font-weight:600;color:var(--muted)}
+.inp input,.inp select{height:46px;padding:0 13px;border-radius:12px;border:1.5px solid var(--line);background:var(--surface);transition:border-color .16s}
+.inp input:focus{border-color:var(--violet);outline:none}
+.inp.bad input{border-color:var(--tang)}
+.err{font-size:11.5px;color:var(--tang);font-weight:600}
+.pay-opts{display:flex;flex-direction:column;gap:9px;margin-bottom:14px}
+.pay-opt{display:flex;align-items:center;gap:11px;padding:13px 14px;border:1.5px solid var(--line);border-radius:14px;background:var(--surface);cursor:pointer;transition:border-color .16s}
+.pay-opt[data-on="true"]{border-color:var(--violet);background:color-mix(in srgb,var(--violet) 7%,var(--surface))}
+.pay-opt .radio{width:18px;height:18px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center;flex:none}
+.pay-opt[data-on="true"] .radio{border-color:var(--violet)}
+.pay-opt[data-on="true"] .radio::after{content:"";width:9px;height:9px;border-radius:50%;background:var(--violet)}
+.pay-opt .t{font-weight:700;font-size:14px}
+.pay-opt .s{font-size:12px;color:var(--muted)}
+.summary{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:18px;position:sticky;top:0;display:flex;flex-direction:column;gap:11px}
+.summary h3{font-size:16px;text-transform:uppercase}
+.sum-item{display:grid;grid-template-columns:44px 1fr auto;gap:10px;align-items:center;font-size:13px}
+.sum-item .thumbwrap{border-radius:9px;overflow:hidden;background:var(--surface-2)}
+.sum-item svg{display:block;width:100%;height:auto}
+.demo-fill{align-self:flex-start;font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--violet);border:1px dashed var(--violet);border-radius:9px;padding:7px 11px;margin-bottom:16px}
+
+.modal{position:fixed;z-index:85;left:50%;top:50%;transform:translate(-50%,-50%);width:min(460px,calc(100% - 28px));max-height:86vh;overflow:auto;background:var(--bg);border-radius:24px;box-shadow:0 30px 70px -30px rgba(0,0,0,.7);padding:26px 24px;animation:zoom .34s cubic-bezier(.2,.9,.3,1);text-align:center}
+@keyframes zoom{from{opacity:0;transform:translate(-50%,-46%) scale(.94)}}
+.tick{width:66px;height:66px;margin:0 auto 14px;border-radius:50%;background:var(--lime);display:grid;place-items:center}
+.tick svg{width:32px;height:32px}
+.tick path{stroke:var(--on-lime);stroke-width:3.2;fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:32;stroke-dashoffset:32;animation:draw .5s .15s forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+.modal h2{font-size:26px;text-transform:uppercase}
+.spinner{width:52px;height:52px;margin:6px auto 16px;border-radius:50%;border:4px solid var(--line);border-top-color:var(--violet);animation:spin .85s linear infinite}
+
+/* delivery */
+.track{text-align:left;margin-top:20px}
+.route{position:relative;height:84px;margin:10px 0 22px;border-radius:16px;background:var(--surface);border:1px solid var(--line);overflow:hidden}
+.route .road{position:absolute;left:14px;right:14px;top:52px;height:3px;background:repeating-linear-gradient(90deg,var(--line) 0 10px,transparent 10px 20px)}
+.route .done{position:absolute;left:14px;top:52px;height:3px;background:var(--violet);width:12%;animation:drive 2.4s .2s cubic-bezier(.3,.7,.4,1) forwards}
+@keyframes drive{to{width:68%}}
+.truck{position:absolute;top:18px;left:14px;animation:truckgo 2.4s .2s cubic-bezier(.3,.7,.4,1) forwards}
+@keyframes truckgo{from{left:14px}to{left:calc(68% - 18px)}}
+.truck .box{width:40px;height:26px;border-radius:7px;background:var(--ink);position:relative}
+.truck .box::after{content:"";position:absolute;right:-13px;bottom:0;width:16px;height:17px;border-radius:5px 7px 5px 5px;background:var(--tang)}
+.truck .wheels{display:flex;gap:22px;margin:3px 0 0 6px}
+.truck .wheels i{width:8px;height:8px;border-radius:50%;background:var(--muted);display:block}
+.pin{position:absolute;top:34px;font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.pin.a{left:14px}
+.pin.b{right:14px;text-align:right;color:var(--violet)}
+.steps{display:flex;flex-direction:column;gap:0}
+.step{display:grid;grid-template-columns:26px 1fr;gap:12px;padding-bottom:16px;position:relative}
+.step:not(:last-child)::before{content:"";position:absolute;left:12px;top:22px;bottom:2px;width:2px;background:var(--line)}
+.step.done:not(:last-child)::before{background:var(--violet)}
+.step .bul{width:26px;height:26px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center;background:var(--bg);font-size:12px;color:var(--muted);z-index:1}
+.step.done .bul{background:var(--violet);border-color:var(--violet);color:var(--on-violet)}
+.step.now .bul{border-color:var(--tang);background:var(--tang);color:#fff;animation:ping 1.8s ease-out infinite}
+@keyframes ping{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--tang) 55%,transparent)}70%{box-shadow:0 0 0 12px transparent}100%{box-shadow:0 0 0 0 transparent}}
+.step .t{font-weight:700;font-size:14px;line-height:1.3}
+.step .s{font-size:12.5px;color:var(--muted)}
+.courier{display:flex;align-items:center;gap:12px;padding:13px;border-radius:14px;background:var(--surface);border:1px solid var(--line);margin-top:4px;text-align:left}
+.avatar{width:42px;height:42px;border-radius:50%;background:var(--violet);color:var(--on-violet);display:grid;place-items:center;font-family:var(--display);font-weight:900;flex:none}
+.otp{margin-left:auto;text-align:right}
+.otp b{font-family:var(--mono);font-size:17px;letter-spacing:.14em;display:block}
+
+.toast{position:fixed;left:50%;bottom:calc(22px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:90;background:var(--ink);color:var(--bg);padding:12px 18px;border-radius:14px;font-size:13.5px;font-weight:600;display:flex;align-items:center;gap:10px;box-shadow:var(--shadow);animation:toastin .3s cubic-bezier(.2,1.3,.4,1)}
+@keyframes toastin{from{opacity:0;transform:translate(-50%,16px)}}
+.toast .ok{width:20px;height:20px;border-radius:50%;background:var(--lime);color:var(--on-lime);display:grid;place-items:center;font-size:12px}
+
+footer{border-top:1px solid var(--line);margin-top:20px}
+.foot{display:flex;flex-wrap:wrap;gap:18px;align-items:center;padding-block:28px 40px;font-size:13px;color:var(--muted)}
+.foot .logo{color:var(--ink)}
+.foot .spacer{margin-left:auto}
+.disclaimer{display:inline-flex;align-items:center;gap:7px;padding:6px 11px;border-radius:999px;border:1px dashed var(--line);font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+}
+</style>
+
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <div class="logo"><span class="star">✦</span>Sidequest</div>
+    <nav class="nav">
+      <button data-nav="shop" aria-current="true">Shop</button>
+      <button data-nav="drops">Drops</button>
+      <button data-nav="lookbook">Lookbook</button>
+      <button data-nav="about">About</button>
+    </nav>
+    <div class="hdr-right">
+      <button class="icon-btn" id="themeBtn" title="Switch theme" aria-label="Switch theme">◐</button>
+      <button class="cart-btn" id="cartBtn">Cart <span class="badge num" id="cartCount">0</span></button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <!-- ===== SHOP ===== -->
+  <section id="viewShop">
+    <div class="wrap">
+      <div class="hero">
+        <div>
+          <span class="eyebrow mono">Drop 04 — Autumn / Winter 26</span>
+          <h1>Wear the<br><em>detour</em></h1>
+          <p class="lede">Heavyweight fleece, boxed cuts and cargo built for the long way round. Cut in limited runs of 300 — when it's gone, it's gone.</p>
+          <div class="hero-cta">
+            <button class="btn btn-primary" id="shopNow">Shop the drop →</button>
+            <button class="btn btn-ghost" id="lookbookBtn">Size guide</button>
+          </div>
+        </div>
+        <div class="hero-figure">
+          <div class="plate-box" id="heroPlate"></div>
+          <div class="seal">300<br>PIECES<br>ONLY</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker-track" id="ticker"></div>
+  </div>
+
+  <section id="viewGrid">
+    <div class="wrap">
+      <div class="shop-head">
+        <h2>The drop</h2>
+        <div class="chips" id="chips"></div>
+      </div>
+      <div class="grid" id="grid"></div>
+    </div>
+  </section>
+
+  <!-- ===== PRODUCT ===== -->
+  <section id="viewPdp" hidden>
+    <div class="wrap pdp">
+      <button class="back" id="backBtn">← Back to the drop</button>
+      <div class="pdp-grid" id="pdp"></div>
+      <div class="more">
+        <h2>Pairs with</h2>
+        <div class="grid" id="related" style="padding-bottom:0"></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <div class="logo"><span class="star">✦</span>Sidequest</div>
+    <span>Mumbai · Est. 2026</span>
+    <span class="spacer"></span>
+    <span class="disclaimer">Demo store — no real orders</span>
+  </div>
+</footer>
+
+<div id="layers"></div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ---------- data ---------- */
+  const TOPS = ["S","M","L","XL","XXL"], WAIST = ["28","30","32","34","36"], ONE = ["One size"];
+  const P = [
+    { id:"hood", name:"Static Noise Hoodie", cat:"tops", shape:"hoodie", price:4299, was:5499, sizes:TOPS, out:["XXL"],
+      blurb:"460gsm brushed-back fleece with a double-layer hood and boxy drop shoulder. Print sits high on the chest so it reads under a jacket.",
+      details:["460gsm cotton fleece, garment dyed","Boxy fit — size down for a regular fit","Kangaroo pocket with hidden phone slip","Screen-printed, hand-finished in Mumbai"],
+      rating:4.8, reviews:216, tag:"Best seller",
+      variants:[
+        {name:"Ultraviolet", hex:"#6B35F0", hex2:"#4A1DB5", shade:"#3A1490", print:"#D6FF3E", bg1:"#E6DEFB", bg2:"#C7B6F5", blob:"#FFFFFF", dot:"#6B35F0"},
+        {name:"Bone", hex:"#EFE9DD", hex2:"#D8CFBE", shade:"#BCB1A0", print:"#FF5A1F", bg1:"#F6EFE4", bg2:"#E0D4C0", blob:"#FFF9EF", dot:"#B9A98F"},
+        {name:"Moss", hex:"#3E4A32", hex2:"#2A3322", shade:"#1F271A", print:"#D6FF3E", bg1:"#DCE4D2", bg2:"#B3C0A3", blob:"#F0F5E9", dot:"#5C6B4B"}
+      ]},
+    { id:"tee", name:"Null Pointer Tee", cat:"tops", shape:"tee", price:1799, was:2199, sizes:TOPS, out:[],
+      blurb:"240gsm single jersey, washed twice so it won't twist. The circle graphic is a nod to the loading spinner that never ends.",
+      details:["240gsm combed cotton","Relaxed body, ribbed collar","Pre-shrunk, machine wash cold","Unisex sizing"],
+      rating:4.6, reviews:412, tag:"New",
+      variants:[
+        {name:"Jet", hex:"#1B1B20", hex2:"#101014", shade:"#000", print:"#D6FF3E", bg1:"#DEDAE8", bg2:"#B8B1CC", blob:"#F3F0FA", dot:"#8D85A6"},
+        {name:"Acid", hex:"#D6FF3E", hex2:"#B2DC1E", shade:"#8BA814", print:"#1B1B20", bg1:"#EFF6D8", bg2:"#D3E2A4", blob:"#FBFFF0", dot:"#A6BD60"},
+        {name:"Tangerine", hex:"#FF6A33", hex2:"#DF4A14", shade:"#B33A0E", print:"#FFF4E8", bg1:"#FBE3D6", bg2:"#F2BE9F", blob:"#FFF6F0", dot:"#E08A5F"}
+      ]},
+    { id:"cargo", name:"Cargo Ops Pant", cat:"bottoms", shape:"pants", price:3899, was:4699, sizes:WAIST, out:["28"],
+      blurb:"Ripstop cargo with articulated knees and seven pockets. Cuffs cinch so they stack clean over any boot.",
+      details:["Cotton ripstop, water-repellent finish","Seven pockets incl. two hidden","Adjustable hem toggles","Inseam 76cm on size 32"],
+      rating:4.7, reviews:138, tag:"",
+      variants:[
+        {name:"Slate", hex:"#555C6B", hex2:"#3C4250", shade:"#2A2F3A", print:"#D6FF3E", bg1:"#DFE2EA", bg2:"#B6BDCC", blob:"#F2F4F8", dot:"#8F97A8"},
+        {name:"Sand", hex:"#C9B38C", hex2:"#AA9470", shade:"#8A7656", print:"#2A2318", bg1:"#F1E7D5", bg2:"#DCC9A6", blob:"#FFFBF2", dot:"#B59C72"},
+        {name:"Jet", hex:"#23232A", hex2:"#15151A", shade:"#07070A", print:"#FF6A33", bg1:"#E0DDE7", bg2:"#B5B0C4", blob:"#F4F2F9", dot:"#8B86A0"}
+      ]},
+    { id:"puffer", name:"Low Orbit Puffer", cat:"tops", shape:"puffer", price:7499, was:8999, sizes:TOPS, out:["S"],
+      blurb:"Cropped box puffer with recycled fill and a high collar that actually covers your face when the wind turns.",
+      details:["Recycled 400-fill, bluesign approved shell","Cropped boxy length","Two-way zip, storm flap","Packs into its own left pocket"],
+      rating:4.9, reviews:87, tag:"Low stock",
+      variants:[
+        {name:"Signal", hex:"#FF5A1F", hex2:"#D33E0C", shade:"#A12E07", print:"#FFF2E8", bg1:"#FAE0D2", bg2:"#EFB694", blob:"#FFF7F1", dot:"#DD7F51"},
+        {name:"Ink", hex:"#1E2338", hex2:"#121626", shade:"#070A14", print:"#8B5CFF", bg1:"#DCDFEC", bg2:"#AEB4CE", blob:"#F0F2F9", dot:"#878EAD"},
+        {name:"Glacier", hex:"#BFD7E6", hex2:"#95B6CB", shade:"#6F93AB", print:"#1E2338", bg1:"#E4EFF5", bg2:"#BCD6E4", blob:"#F6FBFD", dot:"#8FB2C6"}
+      ]},
+    { id:"cap", name:"Pixel Burn Cap", cat:"headwear", shape:"cap", price:1299, was:1599, sizes:ONE, out:[],
+      blurb:"Six-panel washed twill with a flat embroidered mark and an adjustable metal clasp. Pre-curved brim, no breaking in.",
+      details:["Washed cotton twill","Flat embroidery, 8,400 stitches","Metal clasp strap","Pre-curved brim"],
+      rating:4.5, reviews:303, tag:"",
+      variants:[
+        {name:"Jet", hex:"#232329", hex2:"#15151A", shade:"#0A0A0E", print:"#D6FF3E", bg1:"#E2DEEA", bg2:"#B6AFCB", blob:"#F4F2FA", dot:"#8C85A5"},
+        {name:"Lilac", hex:"#B9A6F2", hex2:"#9280D6", shade:"#6F5CB4", print:"#211540", bg1:"#EBE4FC", bg2:"#CBBDF3", blob:"#F8F5FF", dot:"#A28FDC"},
+        {name:"Signal", hex:"#FF6A33", hex2:"#DD4A13", shade:"#AC360B", print:"#FFF2E8", bg1:"#FBE4D8", bg2:"#F0BA9C", blob:"#FFF8F3", dot:"#DF875C"}
+      ]},
+    { id:"beanie", name:"Soft Lag Beanie", cat:"headwear", shape:"beanie", price:999, was:1299, sizes:ONE, out:[],
+      blurb:"Chunky rib knit with a deep fold cuff. Wool-blend, so it holds shape after the fifth wash.",
+      details:["50% merino / 50% acrylic rib knit","Deep double-fold cuff","Woven label at the fold","Hand wash cold"],
+      rating:4.4, reviews:178, tag:"",
+      variants:[
+        {name:"Moss", hex:"#44523A", hex2:"#2F3A28", shade:"#212A1C", print:"#D6FF3E", bg1:"#E0E7D7", bg2:"#B7C4A8", blob:"#F2F6EC", dot:"#73825F"},
+        {name:"Bone", hex:"#EDE6D8", hex2:"#D5CBB7", shade:"#B3A894", print:"#FF5A1F", bg1:"#F6F0E5", bg2:"#DFD3BE", blob:"#FFFCF6", dot:"#B9AB91"},
+        {name:"Ultraviolet", hex:"#6B35F0", hex2:"#4A1DB5", shade:"#37137F", print:"#D6FF3E", bg1:"#E7DFFC", bg2:"#C6B5F4", blob:"#F7F4FF", dot:"#9C86E3"}
+      ]},
+    { id:"crew", name:"Grid Fault Crewneck", cat:"tops", shape:"crew", price:3299, was:3999, sizes:TOPS, out:[],
+      blurb:"Loopback cotton crew with ribbed cuffs and a wide set-in collar. The grid print misaligns on purpose, panel by panel.",
+      details:["380gsm loopback cotton","Ribbed collar, cuffs and hem","Regular fit through the body","Puff-print grid, six screens"],
+      rating:4.7, reviews:94, tag:"",
+      variants:[
+        {name:"Oat", hex:"#DCD2C0", hex2:"#C1B5A0", shade:"#9E907A", print:"#5B21E8", bg1:"#F2ECE0", bg2:"#DACEBA", blob:"#FFFBF4", dot:"#B6A892"},
+        {name:"Cobalt", hex:"#2F4BD4", hex2:"#1E33A3", shade:"#152578", print:"#D6FF3E", bg1:"#DDE2F8", bg2:"#AEBAEE", blob:"#F1F4FE", dot:"#8495E0"},
+        {name:"Jet", hex:"#202026", hex2:"#131317", shade:"#06060A", print:"#FF6A33", bg1:"#E1DEE8", bg2:"#B4AFC6", blob:"#F4F2FA", dot:"#8A849F"}
+      ]},
+    { id:"tote", name:"Dead Link Tote", cat:"bags", shape:"tote", price:1499, was:1799, sizes:ONE, out:[],
+      blurb:"16oz canvas tote with a flat base and an inside zip pocket. Holds a 16-inch laptop and the groceries on top of it.",
+      details:["16oz heavy canvas","Flat gusseted base","Inner zip pocket","Reinforced 70cm handles"],
+      rating:4.6, reviews:245, tag:"",
+      variants:[
+        {name:"Natural", hex:"#E6DCC6", hex2:"#CFC3A8", shade:"#A89B80", print:"#1B1B20", bg1:"#F3EEE1", bg2:"#DDD2BA", blob:"#FFFDF7", dot:"#BCAE91"},
+        {name:"Jet", hex:"#232329", hex2:"#15151A", shade:"#09090D", print:"#D6FF3E", bg1:"#E2DEEA", bg2:"#B5AFC9", blob:"#F5F3FB", dot:"#8B85A2"},
+        {name:"Signal", hex:"#FF6A33", hex2:"#DE4A14", shade:"#AE370C", print:"#FFF3EA", bg1:"#FBE5D9", bg2:"#F1BD9F", blob:"#FFF9F4", dot:"#E08A61"}
+      ]}
+  ];
+
+  /* ---------- vector studio plates ---------- */
+  let uid = 0;
+  const SHAPES = {
+    hoodie:(v,u)=>`
+      <path d="M146 122C130 52 270 52 254 122 230 148 170 148 146 122Z" fill="${v.shade}"/>
+      <path d="M150 112 92 140 52 252l52 24 24-70v208h144V206l24 70 52-24-40-112-58-28c-6 40-94 40-100 0Z" fill="url(#s${u})"/>
+      <path d="M152 304h96l10 54H142Z" fill="none" stroke="${v.shade}" stroke-width="4"/>
+      <path d="M184 130l8 62M216 130l-8 62" stroke="${v.print}" stroke-width="6" stroke-linecap="round"/>
+      <text x="200" y="258" text-anchor="middle" font-family="DM Mono,monospace" font-size="25" letter-spacing="5" fill="${v.print}">SQ//04</text>`,
+    tee:(v,u)=>`
+      <path d="M148 100 96 124 58 206l42 22 24-44v220h152V184l24 44 42-22-38-82-52-24c-6 36-94 36-100 0Z" fill="url(#s${u})"/>
+      <path d="M148 100c6 36 94 36 100 0" fill="none" stroke="${v.shade}" stroke-width="7"/>
+      <circle cx="200" cy="262" r="46" fill="none" stroke="${v.print}" stroke-width="7" stroke-dasharray="190 100" transform="rotate(-35 200 262)"/>
+      <text x="200" y="268" text-anchor="middle" font-family="DM Mono,monospace" font-size="19" letter-spacing="2" fill="${v.print}">NULL</text>`,
+    crew:(v,u)=>`
+      <path d="M150 112 92 140 52 252l52 24 24-70v202h144V206l24 70 52-24-40-112-58-28c-6 38-94 38-100 0Z" fill="url(#s${u})"/>
+      <path d="M150 112c6 38 94 38 100 0" fill="none" stroke="${v.shade}" stroke-width="9"/>
+      <rect x="128" y="390" width="144" height="18" fill="${v.shade}"/>
+      <g stroke="${v.print}" stroke-width="5" opacity=".95">
+        <path d="M156 230h88M156 268h88M156 306h88M166 212v112M200 206v120M234 218v100"/>
+      </g>`,
+    pants:(v,u)=>`
+      <path d="M136 96h128l12 318h-62l-14-168-14 168h-62Z" fill="url(#s${u})"/>
+      <rect x="132" y="90" width="136" height="28" rx="6" fill="${v.shade}"/>
+      <rect x="140" y="208" width="46" height="60" rx="7" fill="none" stroke="${v.shade}" stroke-width="4"/>
+      <rect x="216" y="208" width="46" height="60" rx="7" fill="none" stroke="${v.shade}" stroke-width="4"/>
+      <path d="M200 122v128" stroke="${v.shade}" stroke-width="3" opacity=".55"/>
+      <path d="M140 352h46M216 352h46" stroke="${v.print}" stroke-width="5" stroke-linecap="round"/>`,
+    puffer:(v,u)=>`
+      <path d="M150 108 92 134 62 250l46 20 22-60v198h140V210l22 60 46-20-30-116-58-26c-6 32-94 32-100 0Z" fill="url(#s${u})"/>
+      <g stroke="${v.shade}" stroke-width="5" opacity=".5"><path d="M130 176h140M130 222h140M130 268h140M130 314h140M130 360h140"/></g>
+      <rect x="148" y="94" width="104" height="28" rx="14" fill="${v.shade}"/>
+      <path d="M200 132v276" stroke="${v.print}" stroke-width="5"/>`,
+    cap:(v,u)=>`
+      <path d="M92 272c0-124 216-124 216 0Z" fill="url(#s${u})"/>
+      <path d="M86 268c54 56 214 52 260 6-46-26-206-28-260-6Z" fill="${v.shade}"/>
+      <circle cx="200" cy="164" r="11" fill="${v.print}"/>
+      <path d="M200 176v96" stroke="${v.shade}" stroke-width="4" opacity=".5"/>
+      <text x="200" y="246" text-anchor="middle" font-family="DM Mono,monospace" font-size="22" letter-spacing="4" fill="${v.print}">SQ</text>`,
+    beanie:(v,u)=>`
+      <path d="M108 292c0-138 184-138 184 0Z" fill="url(#s${u})"/>
+      <g stroke="${v.shade}" stroke-width="4" opacity=".45"><path d="M140 200v92M170 180v112M200 172v120M230 180v112M260 200v92"/></g>
+      <rect x="98" y="282" width="204" height="60" rx="16" fill="${v.shade}"/>
+      <text x="200" y="322" text-anchor="middle" font-family="DM Mono,monospace" font-size="20" letter-spacing="5" fill="${v.print}">LAG</text>`,
+    tote:(v,u)=>`
+      <path d="M160 174c0-64 80-64 80 0" fill="none" stroke="${v.shade}" stroke-width="13" stroke-linecap="round"/>
+      <rect x="124" y="168" width="152" height="240" rx="10" fill="url(#s${u})"/>
+      <text x="200" y="288" text-anchor="middle" font-family="DM Mono,monospace" font-size="20" letter-spacing="3" fill="${v.print}">404</text>
+      <text x="200" y="314" text-anchor="middle" font-family="DM Mono,monospace" font-size="12" letter-spacing="3" fill="${v.print}" opacity=".85">NOT FOUND</text>`
+  };
+
+  function plate(p, vi){
+    const v = p.variants[vi] || p.variants[0], u = "p" + (uid++);
+    return `<svg class="plate" viewBox="0 0 400 500" role="img" aria-label="${p.name} in ${v.name}">
+      <defs>
+        <linearGradient id="g${u}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${v.bg1}"/><stop offset="1" stop-color="${v.bg2}"/></linearGradient>
+        <linearGradient id="s${u}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${v.hex}"/><stop offset="1" stop-color="${v.hex2}"/></linearGradient>
+        <pattern id="d${u}" width="15" height="15" patternUnits="userSpaceOnUse"><circle cx="3" cy="3" r="1.5" fill="${v.dot}" opacity=".45"/></pattern>
+      </defs>
+      <rect width="400" height="500" fill="url(#g${u})"/>
+      <circle cx="312" cy="98" r="132" fill="${v.blob}" opacity=".5"/>
+      <rect width="400" height="500" fill="url(#d${u})"/>
+      <g>${SHAPES[p.shape](v,u)}</g>
+    </svg>`;
+  }
+
+  /* ---------- helpers ---------- */
+  const $ = s => document.querySelector(s);
+  const money = n => "₹" + n.toLocaleString("en-IN");
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+  const layers = $("#layers");
+  const byId = id => P.find(p => p.id === id);
+  const SHIP_FREE = 2999, SHIP_FEE = 149;
+
+  let cart = [];
+  let filter = "all";
+  let current = null;      // {product, variant, size, qty}
+  let orderNo = null;
+
+  /* ---------- header + chrome ---------- */
+  $("#themeBtn").addEventListener("click", () => {
+    const now = document.documentElement.getAttribute("data-theme");
+    const dark = now ? now === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
+    document.documentElement.setAttribute("data-theme", dark ? "light" : "dark");
+  });
+  document.querySelectorAll("[data-nav]").forEach(b => b.addEventListener("click", () => {
+    document.querySelectorAll("[data-nav]").forEach(o => o.setAttribute("aria-current", String(o === b)));
+    if (b.dataset.nav === "shop" || b.dataset.nav === "drops") { showShop(); scrollToGrid(); }
+    else toast("That page is not part of this demo");
+  }));
+  $("#shopNow").addEventListener("click", scrollToGrid);
+  $("#lookbookBtn").addEventListener("click", () => toast("Size guide is not part of this demo"));
+  $("#backBtn").addEventListener("click", () => { showShop(); scrollToGrid(); });
+  function scrollToGrid(){ $("#viewGrid").scrollIntoView({behavior:"smooth", block:"start"}); }
+
+  const tickerText = ["Free shipping over ₹2,999","Drop 04 is live","Cash on delivery available","300 pieces per run","New drop every friday","Free 30-day returns"];
+  $("#ticker").innerHTML = Array.from({length:2}, () => tickerText.map(t => `<span>✦ ${t}</span>`).join("")).join("");
+  $("#heroPlate").innerHTML = plate(P[0], 0);
+
+  /* ---------- shop grid ---------- */
+  const CATS = [["all","All"],["tops","Tops"],["bottoms","Bottoms"],["headwear","Headwear"],["bags","Bags"]];
+  $("#chips").innerHTML = CATS.map(([k,l]) => `<button class="chip" data-cat="${k}" aria-pressed="${k===filter}">${l}</button>`).join("");
+  $("#chips").addEventListener("click", e => {
+    const b = e.target.closest("[data-cat]"); if (!b) return;
+    filter = b.dataset.cat;
+    $("#chips").querySelectorAll(".chip").forEach(c => c.setAttribute("aria-pressed", String(c.dataset.cat === filter)));
+    renderGrid();
+  });
+
+  function cardHTML(p, i){
+    return `<article class="card" style="animation-delay:${Math.min(i,8)*45}ms">
+      <div class="plate-box">
+        ${plate(p,0)}
+        ${p.tag ? `<span class="tag">${esc(p.tag)}</span>` : ""}
+        <button class="quick" data-open="${p.id}">View product</button>
+      </div>
+      <h3>${esc(p.name)}</h3>
+      <div class="card-row">
+        <span class="price num">${money(p.price)}</span>
+        <span class="mono muted num">${p.rating} ★</span>
+        <span class="dots">${p.variants.map(v => `<i class="dot" style="background:${v.hex}" title="${esc(v.name)}"></i>`).join("")}</span>
+      </div>
+    </article>`;
+  }
+  function renderGrid(){
+    const list = P.filter(p => filter === "all" || p.cat === filter);
+    $("#grid").innerHTML = list.map(cardHTML).join("");
+  }
+  document.addEventListener("click", e => {
+    const b = e.target.closest("[data-open]");
+    if (b) openProduct(b.dataset.open);
+  });
+  renderGrid();
+
+  /* ---------- product sheet ---------- */
+  function openProduct(id, keep){
+    const p = byId(id);
+    current = { p, vi: 0, size: p.sizes.find(s => !p.out.includes(s)), qty: 1 };
+    renderPdp();
+    $("#viewShop").hidden = true; $("#viewGrid").hidden = true; $("#viewPdp").hidden = false;
+    if (!keep) window.scrollTo(0, 0);
+  }
+  function showShop(){ $("#viewShop").hidden = false; $("#viewGrid").hidden = false; $("#viewPdp").hidden = true; }
+
+  function renderPdp(){
+    const { p, vi, size, qty } = current, v = p.variants[vi];
+    const off = Math.round((1 - p.price / p.was) * 100);
+    $("#pdp").innerHTML = `
+      <div class="gallery">
+        <div class="main">${plate(p, vi)}</div>
+        <div class="thumbs">${p.variants.map((vv,i) =>
+          `<button class="thumb" data-v="${i}" aria-pressed="${i===vi}" aria-label="${esc(vv.name)} colourway">${plate(p,i)}</button>`).join("")}</div>
+      </div>
+      <div>
+        <span class="eyebrow mono">${esc(p.cat)} · Drop 04</span>
+        <h1>${esc(p.name)}</h1>
+        <div class="stars">★★★★★ <span class="muted num" style="color:var(--muted)">${p.rating} · ${p.reviews} reviews</span></div>
+        <div class="pricerow">
+          <span class="big-price num">${money(p.price)}</span>
+          <span class="strike num">${money(p.was)}</span>
+          <span class="save">${off}% off</span>
+        </div>
+        <p class="blurb">${esc(p.blurb)}</p>
+
+        <div class="field-label"><span class="mono">Colour</span><span class="muted" style="font-size:13px">${esc(v.name)}</span></div>
+        <div class="swatches">${p.variants.map((vv,i) =>
+          `<button class="swatch" data-v="${i}" aria-pressed="${i===vi}" aria-label="${esc(vv.name)}"><i style="background:${vv.hex}"></i></button>`).join("")}</div>
+
+        <div class="field-label"><span class="mono">Size</span><button class="mono" id="sizeGuide" style="color:var(--violet)">Size guide</button></div>
+        <div class="sizes">${p.sizes.map(s =>
+          `<button class="size" data-s="${s}" aria-pressed="${s===size}" ${p.out.includes(s)?"disabled":""}>${s}</button>`).join("")}</div>
+
+        <div class="field-label"><span class="mono">Quantity</span></div>
+        <div class="qty">
+          <button data-q="-1" aria-label="Decrease quantity">−</button><span class="num">${qty}</span><button data-q="1" aria-label="Increase quantity">+</button>
+        </div>
+
+        <div class="buy-row">
+          <button class="btn btn-primary" id="addBtn">Add to cart — ${money(p.price * qty)}</button>
+          <button class="btn btn-lime" id="buyBtn">Buy it now</button>
+        </div>
+
+        <div class="ship-note">
+          <span>🚚</span>
+          <span><b>Free delivery</b> on orders over ₹2,999. Order in the next 4 hours to get it by <b>Friday, 24 Oct</b>. COD available.</span>
+        </div>
+
+        <div class="acc">
+          <details open><summary>Details &amp; fabric</summary><div class="body"><ul>${p.details.map(d => `<li>${esc(d)}</li>`).join("")}</ul></div></details>
+          <details><summary>Size &amp; fit</summary><div class="body">Model is 183cm and wears a size M. Boxy through the shoulder; take one size down if you want it closer to the body.</div></details>
+          <details><summary>Shipping &amp; returns</summary><div class="body">Dispatched in 24 hours from Mumbai. Free returns within 30 days, tags on. Exchanges are swapped same-day once the parcel scans in.</div></details>
+        </div>
+      </div>`;
+
+    $("#pdp").querySelectorAll("[data-v]").forEach(b => b.addEventListener("click", () => { current.vi = +b.dataset.v; renderPdp(); }));
+    $("#pdp").querySelectorAll("[data-s]").forEach(b => b.addEventListener("click", () => { current.size = b.dataset.s; renderPdp(); }));
+    $("#pdp").querySelectorAll("[data-q]").forEach(b => b.addEventListener("click", () => {
+      current.qty = Math.max(1, Math.min(9, current.qty + Number(b.dataset.q))); renderPdp();
+    }));
+    $("#sizeGuide").addEventListener("click", () => toast("Size guide is not part of this demo"));
+    $("#addBtn").addEventListener("click", () => { addToCart(); openCart(); });
+    $("#buyBtn").addEventListener("click", () => { addToCart(); openCheckout(); });
+
+    const rel = P.filter(x => x.id !== p.id).slice(0, 4);
+    $("#related").innerHTML = rel.map(cardHTML).join("");
+  }
+
+  /* ---------- cart ---------- */
+  function addToCart(){
+    const { p, vi, size, qty } = current;
+    const key = p.id + "|" + vi + "|" + size;
+    const hit = cart.find(l => l.key === key);
+    if (hit) hit.qty = Math.min(9, hit.qty + qty);
+    else cart.push({ key, id: p.id, vi, size, qty });
+    syncCount(true);
+    toast(`${p.name} added`);
+  }
+  function syncCount(pop){
+    const n = cart.reduce((a, l) => a + l.qty, 0);
+    const el = $("#cartCount"); el.textContent = n;
+    if (pop){ el.classList.remove("pop"); void el.offsetWidth; el.classList.add("pop"); }
+  }
+  const subtotal = () => cart.reduce((a, l) => a + byId(l.id).price * l.qty, 0);
+  const shipping = () => (cart.length === 0 || subtotal() >= SHIP_FREE) ? 0 : SHIP_FEE;
+  const total = () => subtotal() + shipping();
+
+  $("#cartBtn").addEventListener("click", openCart);
+
+  function openCart(){
+    closeLayers();
+    const html = `<div class="scrim" data-close></div>
+    <aside class="drawer" role="dialog" aria-modal="true" aria-label="Your cart">
+      <div class="drawer-head">
+        <h2>Your bag</h2>
+        <span class="mono muted num">${cart.reduce((a,l)=>a+l.qty,0)} items</span>
+        <button class="icon-btn" style="margin-left:auto" data-close aria-label="Close cart">✕</button>
+      </div>
+      <div class="drawer-body" id="cartBody"></div>
+      <div class="drawer-foot">
+        <div class="line"><span class="muted">Subtotal</span><span class="num" id="sub"></span></div>
+        <div class="line"><span class="muted">Shipping</span><span class="num" id="shp"></span></div>
+        <div class="line total"><span>Total</span><span class="num" id="tot"></span></div>
+        <button class="btn btn-primary" id="coBtn" style="width:100%">Checkout</button>
+        <p class="mono muted" style="text-align:center">Demo store — no payment is taken</p>
+      </div>
+    </aside>`;
+    layers.innerHTML = html;
+    drawCart();
+    layers.querySelectorAll("[data-close]").forEach(b => b.addEventListener("click", closeLayers));
+    $("#coBtn").addEventListener("click", () => cart.length ? openCheckout() : toast("Your bag is empty"));
+    document.addEventListener("keydown", escClose);
+  }
+  function drawCart(){
+    const body = $("#cartBody"); if (!body) return;
+    if (!cart.length){
+      body.innerHTML = `<div class="empty"><span class="big">✦</span>Nothing here yet.<br>The drop is one tap away.</div>`;
+    } else {
+      body.innerHTML = cart.map(l => {
+        const p = byId(l.id);
+        return `<div class="citem">
+          <div class="thumbwrap">${plate(p, l.vi)}</div>
+          <div>
+            <h4>${esc(p.name)}</h4>
+            <div class="meta">${esc(p.variants[l.vi].name)} · ${esc(l.size)}</div>
+            <div class="mini-qty"><button data-k="${l.key}" data-d="-1" aria-label="Decrease">−</button><span class="num">${l.qty}</span><button data-k="${l.key}" data-d="1" aria-label="Increase">+</button></div>
+          </div>
+          <div style="text-align:right">
+            <div class="price num">${money(p.price * l.qty)}</div>
+            <button class="mono muted" data-rm="${l.key}" style="margin-top:8px">Remove</button>
+          </div>
+        </div>`;
+      }).join("");
+      body.querySelectorAll("[data-d]").forEach(b => b.addEventListener("click", () => {
+        const l = cart.find(x => x.key === b.dataset.k); if (!l) return;
+        l.qty += Number(b.dataset.d);
+        if (l.qty < 1) cart = cart.filter(x => x !== l);
+        syncCount(); drawCart(); drawTotals();
+      }));
+      body.querySelectorAll("[data-rm]").forEach(b => b.addEventListener("click", () => {
+        cart = cart.filter(x => x.key !== b.dataset.rm);
+        syncCount(); drawCart(); drawTotals();
+      }));
+    }
+    drawTotals();
+  }
+  function drawTotals(){
+    if (!$("#sub")) return;
+    $("#sub").textContent = money(subtotal());
+    $("#shp").textContent = shipping() ? money(shipping()) : "Free";
+    $("#tot").textContent = money(total());
+  }
+
+  /* ---------- checkout ---------- */
+  function openCheckout(){
+    closeLayers();
+    layers.innerHTML = `<div class="scrim" data-close></div>
+    <section class="sheet" role="dialog" aria-modal="true" aria-label="Checkout">
+      <div class="sheet-head">
+        <h2>Checkout</h2>
+        <span class="mono muted">Step 2 of 2</span>
+        <button class="icon-btn" style="margin-left:auto" data-close aria-label="Close checkout">✕</button>
+      </div>
+      <form class="sheet-body" id="coForm" novalidate>
+        <div>
+          <button type="button" class="demo-fill" id="fillBtn">Fill with demo details</button>
+          <fieldset>
+            <legend>Where it goes</legend>
+            <div class="row">
+              <div class="inp"><label for="f-name">Full name</label><input id="f-name" name="name" autocomplete="name" placeholder="Riya Sharma"></div>
+              <div class="inp"><label for="f-phone">Phone</label><input id="f-phone" name="phone" inputmode="numeric" autocomplete="tel" placeholder="98XXXXXXXX"></div>
+            </div>
+            <div class="inp"><label for="f-addr">Address</label><input id="f-addr" name="addr" autocomplete="street-address" placeholder="Flat 12B, Sunbeam Apartments, Bandra West"></div>
+            <div class="row">
+              <div class="inp"><label for="f-city">City</label><input id="f-city" name="city" autocomplete="address-level2" placeholder="Mumbai"></div>
+              <div class="inp"><label for="f-pin">PIN code</label><input id="f-pin" name="pin" inputmode="numeric" autocomplete="postal-code" placeholder="400050"></div>
+            </div>
+          </fieldset>
+          <fieldset>
+            <legend>How you pay</legend>
+            <div class="pay-opts" id="payOpts">
+              <label class="pay-opt" data-pay="card" data-on="true"><span class="radio"></span><span><span class="t">Card</span><br><span class="s">Visa, Mastercard, RuPay</span></span></label>
+              <label class="pay-opt" data-pay="upi"><span class="radio"></span><span><span class="t">UPI</span><br><span class="s">Pay by any UPI app</span></span></label>
+              <label class="pay-opt" data-pay="cod"><span class="radio"></span><span><span class="t">Cash on delivery</span><br><span class="s">₹40 handling fee</span></span></label>
+            </div>
+            <div id="payFields"></div>
+          </fieldset>
+        </div>
+        <aside>
+          <div class="summary">
+            <h3>Order summary</h3>
+            <div id="sumItems" style="display:flex;flex-direction:column;gap:10px"></div>
+            <div class="line" style="border-top:1px solid var(--line);padding-top:11px"><span class="muted">Subtotal</span><span class="num" id="sub"></span></div>
+            <div class="line"><span class="muted">Shipping</span><span class="num" id="shp"></span></div>
+            <div class="line total"><span>Total</span><span class="num" id="tot"></span></div>
+            <button class="btn btn-primary" id="payBtn" type="submit" style="width:100%;margin-top:4px">Pay ${money(total())}</button>
+            <p class="mono muted" style="text-align:center">🔒 Demo checkout — nothing is charged</p>
+          </div>
+        </aside>
+      </form>
+    </section>`;
+
+    $("#sumItems").innerHTML = cart.map(l => {
+      const p = byId(l.id);
+      return `<div class="sum-item"><div class="thumbwrap">${plate(p,l.vi)}</div>
+        <div><b>${esc(p.name)}</b><br><span class="mono muted">${esc(p.variants[l.vi].name)} · ${esc(l.size)} · ×${l.qty}</span></div>
+        <span class="num">${money(p.price*l.qty)}</span></div>`;
+    }).join("");
+    drawTotals();
+    renderPayFields("card");
+
+    layers.querySelectorAll("[data-close]").forEach(b => b.addEventListener("click", closeLayers));
+    $("#payOpts").addEventListener("click", e => {
+      const o = e.target.closest("[data-pay]"); if (!o) return;
+      $("#payOpts").querySelectorAll("[data-pay]").forEach(x => x.dataset.on = String(x === o));
+      renderPayFields(o.dataset.pay);
+    });
+    $("#fillBtn").addEventListener("click", fillDemo);
+    $("#coForm").addEventListener("submit", e => { e.preventDefault(); pay(); });
+    document.addEventListener("keydown", escClose);
+  }
+
+  function payMode(){ const o = layers.querySelector('[data-pay][data-on="true"]'); return o ? o.dataset.pay : "card"; }
+
+  function renderPayFields(mode){
+    const box = $("#payFields");
+    if (mode === "card"){
+      box.innerHTML = `
+        <div class="inp"><label for="f-card">Card number</label><input id="f-card" name="card" inputmode="numeric" maxlength="19" placeholder="4242 4242 4242 4242"></div>
+        <div class="row">
+          <div class="inp"><label for="f-exp">Expiry</label><input id="f-exp" name="exp" inputmode="numeric" maxlength="5" placeholder="08/29"></div>
+          <div class="inp"><label for="f-cvv">CVV</label><input id="f-cvv" name="cvv" inputmode="numeric" maxlength="3" placeholder="123"></div>
+        </div>`;
+      $("#f-card").addEventListener("input", e => {
+        e.target.value = e.target.value.replace(/\D/g,"").slice(0,16).replace(/(.{4})/g,"$1 ").trim();
+      });
+      $("#f-exp").addEventListener("input", e => {
+        const d = e.target.value.replace(/\D/g,"").slice(0,4);
+        e.target.value = d.length > 2 ? d.slice(0,2) + "/" + d.slice(2) : d;
+      });
+      $("#f-cvv").addEventListener("input", e => { e.target.value = e.target.value.replace(/\D/g,"").slice(0,3); });
+    } else if (mode === "upi"){
+      box.innerHTML = `<div class="inp"><label for="f-upi">UPI ID</label><input id="f-upi" name="upi" placeholder="riya@okbank"></div>`;
+    } else {
+      box.innerHTML = `<p class="muted" style="font-size:13.5px">Keep ${money(total()+40)} ready. The rider carries a card machine as a backup.</p>`;
+    }
+    const btn = $("#payBtn");
+    if (btn) btn.textContent = mode === "cod" ? "Place order — " + money(total()+40) : "Pay " + money(total());
+  }
+
+  function fillDemo(){
+    const set = (id,val) => { const el = $(id); if (el){ el.value = val; el.dispatchEvent(new Event("input")); } };
+    set("#f-name","Riya Sharma"); set("#f-phone","9820051234");
+    set("#f-addr","Flat 12B, Sunbeam Apartments, Hill Road, Bandra West");
+    set("#f-city","Mumbai"); set("#f-pin","400050");
+    if (payMode() === "card"){ set("#f-card","4242424242424242"); set("#f-exp","0829"); set("#f-cvv","123"); }
+    if (payMode() === "upi") set("#f-upi","riya@okbank");
+    layers.querySelectorAll(".inp.bad").forEach(x => x.classList.remove("bad"));
+    layers.querySelectorAll(".err").forEach(x => x.remove());
+    toast("Demo details filled in");
+  }
+
+  function validate(){
+    const rules = [["#f-name", v => v.trim().length > 2, "Tell us who to hand it to"],
+                   ["#f-phone", v => /^\d{10}$/.test(v.replace(/\D/g,"")), "Enter a 10-digit number"],
+                   ["#f-addr", v => v.trim().length > 8, "Add a full street address"],
+                   ["#f-city", v => v.trim().length > 1, "Add a city"],
+                   ["#f-pin", v => /^\d{6}$/.test(v.replace(/\D/g,"")), "PIN codes have 6 digits"]];
+    if (payMode() === "card"){
+      rules.push(["#f-card", v => v.replace(/\D/g,"").length === 16, "Card numbers have 16 digits"],
+                 ["#f-exp", v => /^\d{2}\/\d{2}$/.test(v), "Use MM/YY"],
+                 ["#f-cvv", v => /^\d{3}$/.test(v), "3 digits"]);
+    }
+    if (payMode() === "upi") rules.push(["#f-upi", v => /^[\w.\-]{3,}@[a-z]{3,}$/i.test(v.trim()), "Looks like name@bank"]);
+
+    layers.querySelectorAll(".err").forEach(x => x.remove());
+    let first = null;
+    rules.forEach(([sel, ok, msg]) => {
+      const el = $(sel); if (!el) return;
+      const wrap = el.closest(".inp");
+      const good = ok(el.value);
+      wrap.classList.toggle("bad", !good);
+      if (!good){
+        wrap.insertAdjacentHTML("beforeend", `<span class="err">${msg}</span>`);
+        if (!first) first = el;
+      }
+    });
+    if (first){ first.focus(); return false; }
+    return true;
+  }
+
+  function pay(){
+    if (!validate()){ toast("Check the highlighted fields"); return; }
+    const amount = payMode() === "cod" ? total() + 40 : total();
+    const steps = payMode() === "cod"
+      ? ["Checking the PIN code…","Reserving your pieces…","Confirming the order…"]
+      : ["Contacting your bank…","Verifying payment…","Confirming the order…"];
+
+    closeLayers();
+    layers.innerHTML = `<div class="scrim"></div>
+      <div class="modal" role="dialog" aria-modal="true" aria-live="polite" aria-label="Processing">
+        <div class="spinner"></div>
+        <h2>Hold tight</h2>
+        <p class="muted" id="payStep" style="margin-top:8px">${steps[0]}</p>
+      </div>`;
+
+    let i = 0;
+    const tick = setInterval(() => {
+      i++;
+      if (i < steps.length){ const el = $("#payStep"); if (el) el.textContent = steps[i]; }
+      else { clearInterval(tick); success(amount); }
+    }, 850);
+  }
+
+  function success(amount){
+    orderNo = "SQ" + String(Math.floor(100000 + Math.random()*899999));
+    layers.innerHTML = `<div class="scrim"></div>
+      <div class="modal" role="dialog" aria-modal="true" aria-label="Order confirmed">
+        <div class="tick"><svg viewBox="0 0 24 24"><path d="M4 12.5l5 5L20 6.5"/></svg></div>
+        <h2>Order placed</h2>
+        <p class="muted" style="margin-top:8px">${money(amount)} · ${payMode()==="cod" ? "Pay the rider on arrival" : "Paid"}</p>
+        <p class="mono" style="margin-top:14px">Order ${orderNo}</p>
+        <p class="muted" style="font-size:13.5px;margin-top:10px">A confirmation would land in your inbox — this is a demo, so nothing is sent.</p>
+        <button class="btn btn-primary" id="trackBtn" style="width:100%;margin-top:20px">Track my order</button>
+      </div>`;
+    cart = []; syncCount(true);
+    $("#trackBtn").addEventListener("click", delivery);
+    setTimeout(() => { if ($("#trackBtn")) delivery(); }, 2600);
+  }
+
+  /* ---------- out for delivery ---------- */
+  function delivery(){
+    const eta = new Date(Date.now() + 1000*60*78);
+    if (eta.getHours() < 10 || eta.getHours() > 20) eta.setHours(18, 40);
+    const hh = eta.getHours() % 12 || 12, mm = String(eta.getMinutes()).padStart(2,"0");
+    const when = `${hh}:${mm} ${eta.getHours() >= 12 ? "PM" : "AM"}`;
+    const otp = String(Math.floor(1000 + Math.random()*8999));
+
+    layers.innerHTML = `<div class="scrim" data-close></div>
+      <div class="modal" role="dialog" aria-modal="true" aria-label="Delivery tracking" style="text-align:left">
+        <div style="display:flex;align-items:center;gap:12px">
+          <span class="mono muted">Order ${orderNo || "SQ482913"}</span>
+          <button class="icon-btn" style="margin-left:auto" data-close aria-label="Close tracking">✕</button>
+        </div>
+        <h2 style="margin-top:14px;font-size:30px">Out for delivery</h2>
+        <p class="muted" style="margin-top:8px">Your bag left the Andheri hub and is on the van. Arriving today, around <b style="color:var(--ink)">${when}</b>.</p>
+
+        <div class="route" aria-hidden="true">
+          <div class="road"></div><div class="done"></div>
+          <div class="truck"><div class="box"></div><div class="wheels"><i></i><i></i></div></div>
+          <span class="pin a">Andheri hub</span>
+          <span class="pin b">Bandra west</span>
+        </div>
+
+        <div class="track">
+          <div class="steps">
+            <div class="step done"><span class="bul">✓</span><span><span class="t">Order placed</span><br><span class="s">Today, 11:04 AM</span></span></div>
+            <div class="step done"><span class="bul">✓</span><span><span class="t">Packed at the studio</span><br><span class="s">Today, 1:20 PM</span></span></div>
+            <div class="step done"><span class="bul">✓</span><span><span class="t">Picked up by courier</span><br><span class="s">Today, 3:45 PM</span></span></div>
+            <div class="step now"><span class="bul">●</span><span><span class="t">Out for delivery</span><br><span class="s">2 stops away · ${when}</span></span></div>
+            <div class="step"><span class="bul">○</span><span><span class="t">Delivered</span><br><span class="s">Share the OTP with the rider</span></span></div>
+          </div>
+          <div class="courier">
+            <span class="avatar">AK</span>
+            <span><b style="font-size:14px">Arjun K.</b><br><span class="mono muted">Van MH-02 · 4.9 ★</span></span>
+            <span class="otp"><span class="mono muted">OTP</span><b class="num">${otp}</b></span>
+          </div>
+        </div>
+        <button class="btn btn-ghost" id="doneBtn" style="width:100%;margin-top:18px">Back to shopping</button>
+      </div>`;
+    layers.querySelectorAll("[data-close]").forEach(b => b.addEventListener("click", closeLayers));
+    $("#doneBtn").addEventListener("click", () => { closeLayers(); showShop(); scrollToGrid(); });
+  }
+
+  /* ---------- overlays + toast ---------- */
+  function closeLayers(){ layers.innerHTML = ""; document.removeEventListener("keydown", escClose); }
+  function escClose(e){ if (e.key === "Escape") closeLayers(); }
+
+  let toastTimer;
+  function toast(msg){
+    let t = document.querySelector(".toast");
+    if (t) t.remove();
+    t = document.createElement("div");
+    t.className = "toast";
+    t.setAttribute("role","status");
+    t.innerHTML = `<span class="ok">✓</span><span></span>`;
+    t.lastChild.textContent = msg;
+    document.body.appendChild(t);
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.remove(), 2300);
+  }
+})();
+</script>
